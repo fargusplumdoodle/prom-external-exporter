@@ -4,20 +4,16 @@ import time
 import nmap3
 
 import pythonping
-from prometheus_client import Gauge
-
-logger = logging.getLogger(__name__)
 
 
 class Exporter(threading.Thread):
-    def __init__(self, host, refresh_rate):
+    def __init__(self, host, refresh_rate, metrics):
         threading.Thread.__init__(self)
         self.host = host
         self.refresh_rate = refresh_rate
         self.nmap = nmap3.Nmap()
-
-        self.ping = Gauge("ping", "Ping duration in ms")
-        self.ports = Gauge("ports", "Open ports on host", ["port", "protocol"])
+        self.metrics = metrics
+        self.logger = logging.getLogger(f"exporter:{self.host}")
 
     def get_avg_ping_time(self):
         """
@@ -29,8 +25,8 @@ class Exporter(threading.Thread):
         ping_durations = [x.time_elapsed_ms for x in stats]
 
         avg_duration = sum(ping_durations) / len(ping_durations)
-        logger.debug("Average ping duration: %s", avg_duration)
-        self.ping.set(avg_duration)
+        self.logger.debug("Average ping duration: %s", avg_duration)
+        self.metrics["ping"].labels(host=self.host).set(avg_duration)
 
     def get_port_scan(self):
         """
@@ -38,12 +34,14 @@ class Exporter(threading.Thread):
 
         If the host is down, will return nothing
         """
-        logger.debug("Starting nmap scan")
+        self.logger.debug("Starting nmap scan")
         results = self.nmap.nmap_version_detection(self.host)
-        logger.debug("Finished nmap scan")
+        self.logger.debug("Finished nmap scan")
 
         for port in results:
-            self.ports.labels(port=port["port"], protocol=port["protocol"]).set(1)
+            self.metrics["ports"].labels(
+                host=self.host, port=port["port"], protocol=port["protocol"]
+            ).set(1)
 
     def run(self):
         while True:

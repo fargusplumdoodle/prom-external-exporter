@@ -1,0 +1,4 @@
+debug: false
+refresh_rate: 120  # seconds
+hosts:  # list of hosts to gather metrics on
+  - localhost

@@ -2,3 +2,4 @@ prometheus-client
 pythonping
 flask
 python3-nmap
+pyyaml

@@ -3,8 +3,8 @@ FROM python:latest
 ADD ./src /src
 WORKDIR /src
 
-RUN pip install -r requirements.txt
 RUN apt update && apt install -y nmap
+RUN pip install -r requirements.txt
 
 EXPOSE 9100
 

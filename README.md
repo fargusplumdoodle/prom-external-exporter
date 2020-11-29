@@ -9,18 +9,25 @@ cannot run a regular exporter on the host
 - Host up (ping)
 - Ports open (nmap)
 
-Metrics are collected from http://hostname:9100/metrics
+Metrics are available from http://hostname:9100/metrics
 
 **Building/running**
 
 Build and run scripts are in the `./scripts` directory
 
-Environment variables:
-- `REFRESH_RATE`: Number of seconds before collecting metrics from host again
-- `HOST`: Host to collect metrics from
-- `DEBUG` (optional): Display debug information or not. Defaults to false
+**Configuring**
 
+edit `./src/config.yml`
 
+Example: 
+```yaml
+debug: false
+refresh_rate: 120  # seconds before scanning hosts again
+hosts:  # list of hosts to gather metrics on
+- localhost
+```
 
+**Helm**
 
-
+The service is not going to be externally available.  It should be deployed in the same namespace as 
+Prometheus.
