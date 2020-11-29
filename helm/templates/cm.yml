@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "fullname" . }}-cm
+  labels:
+    app: {{ include "fullname" . }}
+data:
+  config.yml: |-
+    debug: {{ .Values.conf.debug }}
+    refresh_rate: {{ .Values.conf.refresh_rate }}
+    hosts:
+     {{range .Values.conf.hosts -}}
+      - {{ . | quote }}
+     {{ end}}

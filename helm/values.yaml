@@ -1,0 +1,11 @@
+---
+image:
+  repository: hub.sekhnet.ra/prom-external-exporter
+  pullPolicy: Always
+  tag: "latest"
+
+conf:
+  refresh_rate: 120
+  debug: false
+  hosts:
+    - localhost

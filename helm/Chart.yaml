@@ -1,0 +1,6 @@
+apiVersion: v2
+name: prom-external-exporter
+description: For tracking simple network information remoteley
+type: application
+version: 1.0.0
+appVersion: 1.0.0

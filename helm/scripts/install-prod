@@ -1,0 +1,12 @@
+#!/bin/bash
+helm install bordns . \
+       --set bordns.service.bordnsLoadBalancerIP=10.0.1.252 \
+       --set bordns.service.dnsLoadBalancerIP=10.0.1.253 \
+       --set bordns.conf.auth.username=fargus \
+       --set bordns.conf.auth.password=7YO8n1UhXFzS2mGTZ2Z5zQ== \
+       --set bordns.conf.zones[0].zone=sekhnet.ra \
+       --set bordns.conf.zones[0].path=/ra/sekhnet \
+       --set etcd.storage.persist=true \
+       --set etcd.storage.nfs.path=/mnt/horus/k8-data/bordns \
+       --set etcd.storage.nfs.server=10.0.1.30 \
+       -n bordns --create-namespace
